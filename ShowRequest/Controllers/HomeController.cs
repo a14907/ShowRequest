@@ -19,8 +19,8 @@ namespace ShowRequest.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{*path}")]
-        public IActionResult Get(string path)
+        [Route("{*path}")]
+        public async Task<IActionResult> GetAsync(string path)
         {
             var header = Request.Headers.ToDictionary(m => m.Key, m => m.Value.ToString());
             if (string.Equals(Request.ContentType, "application/json", StringComparison.OrdinalIgnoreCase) ||
@@ -31,7 +31,7 @@ namespace ShowRequest.Controllers
                 {
                     Url = Request.GetDisplayUrl(),
                     Headers = header,
-                    Body = sr.ReadToEnd()
+                    Body = await sr.ReadToEndAsync()
                 });
             }
             else
